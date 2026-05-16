@@ -8,21 +8,55 @@ interface TradingStore {
   simulationMode: boolean;
   toggleSimulationMode: () => void;
 
-  // Agents
+  // Agents — populated from /api/agents
   agents: Agent[];
   setAgents: (agents: Agent[]) => void;
 
-  // Exchanges
+  // Exchanges — populated from /api/exchanges
   exchanges: Exchange[];
   setExchanges: (exchanges: Exchange[]) => void;
 
-  // Daily target
+  // Daily target — populated from /api/daily-target
   dailyTarget: DailyTarget | null;
   setDailyTarget: (target: DailyTarget | null) => void;
 
-  // Positions
+  // Positions — populated from /api/trades
   positions: Position[];
   setPositions: (positions: Position[]) => void;
+
+  // Balance data
+  balance: {
+    currency: string;
+    total: number;
+    free: number;
+    used: number;
+    source?: string;
+    note?: string;
+    btcPrice?: number;
+    changePercent24h?: number;
+    totalVolume24h?: number;
+  } | null;
+  setBalance: (balance: TradingStore["balance"]) => void;
+
+  // News
+  news: any[];
+  setNews: (news: any[]) => void;
+
+  // Fear & Greed
+  fearGreed: { value: number; classification: string; date: string } | null;
+  setFearGreed: (data: TradingStore["fearGreed"]) => void;
+
+  // Trending tokens
+  trendingTokens: any[];
+  setTrendingTokens: (tokens: any[]) => void;
+
+  // Backend connection
+  backendConnected: boolean;
+  setBackendConnected: (connected: boolean) => void;
+
+  // Data source info
+  dataSource: string;
+  setDataSource: (source: string) => void;
 
   // Selected symbol for detail view
   selectedSymbol: string | null;
@@ -33,40 +67,16 @@ interface TradingStore {
   setAutoRefresh: (enabled: boolean) => void;
 }
 
-const DEFAULT_AGENTS: Agent[] = [
-  { id: "market_analyst", name: "Market Analyst", type: "analyst", status: "idle", lastAction: null, tradesExecuted: 0, successRate: 0 },
-  { id: "sentiment_analyst", name: "Sentiment Analyst", type: "analyst", status: "idle", lastAction: null, tradesExecuted: 0, successRate: 0 },
-  { id: "news_analyst", name: "News Analyst", type: "analyst", status: "idle", lastAction: null, tradesExecuted: 0, successRate: 0 },
-  { id: "fundamentals_analyst", name: "Fundamentals Analyst", type: "analyst", status: "idle", lastAction: null, tradesExecuted: 0, successRate: 0 },
-  { id: "onchain_analyst", name: "On-Chain Analyst", type: "analyst", status: "idle", lastAction: null, tradesExecuted: 0, successRate: 0 },
-  { id: "bull_researcher", name: "Bull Researcher", type: "researcher", status: "idle", lastAction: null, tradesExecuted: 0, successRate: 0 },
-  { id: "bear_researcher", name: "Bear Researcher", type: "researcher", status: "idle", lastAction: null, tradesExecuted: 0, successRate: 0 },
-  { id: "risk_manager", name: "Risk Manager", type: "risk", status: "idle", lastAction: null, tradesExecuted: 0, successRate: 0 },
-  { id: "portfolio_manager", name: "Portfolio Manager", type: "manager", status: "idle", lastAction: null, tradesExecuted: 0, successRate: 0 },
-  { id: "trader", name: "Trader Agent", type: "trader", status: "idle", lastAction: null, tradesExecuted: 0, successRate: 0 },
-];
-
-const DEFAULT_EXCHANGES: Exchange[] = [
-  { id: "binance", name: "Binance", type: "cex", connected: false, status: "online" },
-  { id: "bybit", name: "Bybit", type: "cex", connected: false, status: "online" },
-  { id: "okx", name: "OKX", type: "cex", connected: false, status: "online" },
-  { id: "kraken", name: "Kraken", type: "cex", connected: false, status: "online" },
-  { id: "kucoin", name: "KuCoin", type: "cex", connected: false, status: "online" },
-  { id: "gate", name: "Gate.io", type: "cex", connected: false, status: "online" },
-  { id: "hyperliquid", name: "Hyperliquid", type: "cex", connected: false, status: "online" },
-  { id: "jupiter", name: "Jupiter", type: "dex", connected: false, status: "online" },
-  { id: "uniswap", name: "Uniswap", type: "dex", connected: false, status: "online" },
-];
-
 export const useTradingStore = create<TradingStore>((set) => ({
   simulationMode: false,
   toggleSimulationMode: () =>
     set((state) => ({ simulationMode: !state.simulationMode })),
 
-  agents: DEFAULT_AGENTS,
+  // Start with empty arrays — will be populated from real API data
+  agents: [],
   setAgents: (agents) => set({ agents }),
 
-  exchanges: DEFAULT_EXCHANGES,
+  exchanges: [],
   setExchanges: (exchanges) => set({ exchanges }),
 
   dailyTarget: null,
@@ -74,6 +84,24 @@ export const useTradingStore = create<TradingStore>((set) => ({
 
   positions: [],
   setPositions: (positions) => set({ positions }),
+
+  balance: null,
+  setBalance: (balance) => set({ balance }),
+
+  news: [],
+  setNews: (news) => set({ news }),
+
+  fearGreed: null,
+  setFearGreed: (fearGreed) => set({ fearGreed }),
+
+  trendingTokens: [],
+  setTrendingTokens: (trendingTokens) => set({ trendingTokens }),
+
+  backendConnected: false,
+  setBackendConnected: (backendConnected) => set({ backendConnected }),
+
+  dataSource: "loading",
+  setDataSource: (dataSource) => set({ dataSource }),
 
   selectedSymbol: null,
   setSelectedSymbol: (selectedSymbol) => set({ selectedSymbol }),

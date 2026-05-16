@@ -10,10 +10,15 @@ import { SignalsTable } from "@/components/dashboard/signals-table";
 import { DailyTargetCard } from "@/components/dashboard/daily-target";
 import { ExchangesStatus } from "@/components/dashboard/exchanges-status";
 import { MarketPricesTable } from "@/components/dashboard/market-prices";
+import { NewsPanel } from "@/components/dashboard/news-panel";
+import { FearGreedCard } from "@/components/dashboard/fear-greed-card";
+import { TrendingTokens } from "@/components/dashboard/trending-tokens";
 import { useMarketData, useSignals, useSystemStatus } from "@/hooks/use-market-data";
+import { useSyncStoreFromAPIs } from "@/hooks/use-sync-store";
 import { useTradingStore } from "@/hooks/use-trading-store";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { WifiOff } from "lucide-react";
+import { WifiOff, Server } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 function Dashboard() {
   const {
@@ -30,10 +35,13 @@ function Dashboard() {
     data: status,
     isLoading: isStatusLoading,
   } = useSystemStatus();
-  const { simulationMode } = useTradingStore();
 
+  // Sync all API data into Zustand store
+  const { isLoading: isStoreLoading, hasError: storeError } = useSyncStoreFromAPIs();
+
+  const { simulationMode, backendConnected, dataSource } = useTradingStore();
   const signals = signalsData?.signals;
-  const hasError = marketError || signalsError;
+  const hasError = marketError || signalsError || storeError;
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -52,6 +60,24 @@ function Dashboard() {
       {/* Main content */}
       <main className="flex-1 relative z-10">
         <div className="p-4 md:p-6 space-y-4 md:space-y-6 max-w-[1600px] mx-auto">
+          {/* Data Source Banner */}
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <div className="flex items-center gap-1.5">
+              {backendConnected ? (
+                <Server className="h-3 w-3 text-emerald-400" />
+              ) : (
+                <Server className="h-3 w-3 text-amber-400" />
+              )}
+              <span>
+                {backendConnected
+                  ? "Python Backend Connected"
+                  : "Direct API Mode (Live Data)"}
+              </span>
+            </div>
+            <span className="text-muted-foreground/50">|</span>
+            <span>Source: {dataSource === "loading" ? "Loading..." : dataSource}</span>
+          </div>
+
           {/* Error banner */}
           {hasError && (
             <Alert className="border-red-500/30 bg-red-500/5">
@@ -85,6 +111,15 @@ function Dashboard() {
 
               {/* Positions Table */}
               <PositionsTable marketData={marketData} />
+
+              {/* News & Sentiment Row */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <NewsPanel />
+                <div className="space-y-4">
+                  <FearGreedCard />
+                  <TrendingTokens />
+                </div>
+              </div>
             </div>
 
             {/* Right Column - Agents + Daily Target + Exchanges */}
@@ -108,9 +143,21 @@ function Dashboard() {
           <p className="text-[10px] text-muted-foreground">
             OmniTrade v1.0.0 · AI-Powered Trading Platform
           </p>
-          <p className="text-[10px] text-muted-foreground">
-            {simulationMode ? "⚠️ Simulation Mode — No real trades" : "No exchange connected"}
-          </p>
+          <div className="flex items-center gap-3">
+            <Badge
+              variant="outline"
+              className={`text-[9px] ${
+                backendConnected
+                  ? "border-emerald-500/50 text-emerald-400"
+                  : "border-amber-500/50 text-amber-400"
+              }`}
+            >
+              {backendConnected ? "Backend Live" : "Direct API"}
+            </Badge>
+            <p className="text-[10px] text-muted-foreground">
+              {simulationMode ? "⚠️ Simulation Mode — No real trades" : backendConnected ? "Live Trading" : "Market Data Only"}
+            </p>
+          </div>
         </div>
       </footer>
     </div>

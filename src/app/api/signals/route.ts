@@ -88,11 +88,11 @@ function generateSignalFromAnalysis(
     confidence += 0.15;
     reasons.push(`RSI overbought at ${rsi.toFixed(1)}`);
   } else if (rsi < 45) {
-    if (action !== "sell") action = "buy";
+    action = "buy";
     confidence += 0.05;
     reasons.push(`RSI neutral-bullish at ${rsi.toFixed(1)}`);
   } else if (rsi > 55) {
-    if (action !== "buy") action = "sell";
+    action = "sell";
     confidence += 0.05;
     reasons.push(`RSI neutral-bearish at ${rsi.toFixed(1)}`);
   }
