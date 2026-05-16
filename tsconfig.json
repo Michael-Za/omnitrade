@@ -40,7 +40,9 @@
     "node_modules",
     "examples",
     "omnitrade",
+    "omnitrade-backend",
     "mini-services",
-    "skills"
+    "skills",
+    "Vibe-Trading"
   ]
 }

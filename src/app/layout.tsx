@@ -14,10 +14,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "OmniTrade — AI-Powered Trading Platform",
-  description: "Unified AI-Powered Trading Platform with multi-agent analysis, real-time market data, and automated trading.",
-  keywords: ["OmniTrade", "trading", "AI", "cryptocurrency", "dashboard", "automated trading"],
-  authors: [{ name: "OmniTrade Team" }],
+  title: "Omnitrade — Unified AI Trading Platform",
+  description: "Real-time trading command center with AI agents, multi-market analysis, backtesting, and automated trading bots.",
+  keywords: ["Omnitrade", "trading", "AI", "cryptocurrency", "dashboard", "automated trading", "backtesting"],
+  authors: [{ name: "Omnitrade Team" }],
   icons: {
     icon: "/logo.svg",
   },
