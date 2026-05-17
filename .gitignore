@@ -52,3 +52,21 @@ prompt
 server.log
 # Skills directory
 /skills/
+# Agent context
+/agent-ctx/
+# Database
+*.db
+*.db-journal
+# Uploads
+/upload/
+# Download outputs
+/download/
+# Z scripts
+.zscripts/
+# Lock files
+bun.lock
+# Mini services temp
+mini-services/
+# Search results
+search_results.json
+repos.json

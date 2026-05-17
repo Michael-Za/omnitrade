@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>OMNI // INSTITUTIONAL TERMINAL</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        void: 'var(--void)',
+                        ink: 'var(--ink)',
+                        graphite: 'var(--graphite)',
+                        smoke: 'var(--smoke)',
+                        primary: 'var(--text-primary)',
+                        secondary: 'var(--text-secondary)',
+                        muted: 'var(--text-muted)',
+                        accent: 'var(--accent)',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+                    },
+                    animation: {
+                        'subtle-pulse': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --easing: cubic-bezier(0.2, 0, 0, 1);
+
+            /* Institutional Slate Dark - OLLAMA SCALE */
+            --void: #09090b;
+            --ink: #111114;
+            --graphite: #18181b;
+            --smoke: #27272a;
+            --border: rgba(255, 255, 255, 0.12);
+            --border-hover: rgba(255, 255, 255, 0.25);
+            --text-primary: #ffffff;
+            --text-secondary: #d1d1d6;
+            /* Brightened for better visibility */
+            --text-muted: #71717a;
+            /* Slate 500 */
+            --accent: #ffffff;
+            --mesh: rgba(255, 255, 255, 0.04);
+        }
+
+        html.light {
+            --void: #f9f9fb;
+            --ink: #ffffff;
+            --graphite: #f1f1f4;
+            --smoke: #e4e4e7;
+            --border: rgba(0, 0, 0, 0.12);
+            --border-hover: rgba(0, 0, 0, 0.22);
+            --text-primary: #09090b;
+            --text-secondary: #27272a;
+            --text-muted: #52525b;
+            --accent: #000000;
+            --mesh: rgba(0, 0, 0, 0.04);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, system-ui, sans-serif;
+            font-size: 14px;
+            /* Increased from default */
+            line-height: 1.5;
+            background-color: var(--void);
+            color: var(--text-secondary);
+            margin: 0;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            transition: background-color 0.8s var(--easing), color 0.8s var(--easing);
+        }
+
+        .font-mono-data {
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: -0.02em;
+        }
+
+        .terminal-panel {
+            background: var(--ink);
+            border: 1px solid var(--border);
+            transition: all 0.5s var(--easing);
+        }
+
+        .terminal-panel:hover {
+            border-color: var(--border-hover);
+            background: var(--graphite);
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: var(--smoke);
+            border-radius: 10px;
+        }
+
+        .page-enter {
+            animation: pageEnter 0.6s var(--easing) forwards;
+        }
+
+        @keyframes pageEnter {
+            from {
+                opacity: 0;
+                transform: translateY(4px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .mesh-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle, var(--mesh) 1px, transparent 1px);
+            background-size: 24px 24px;
+            pointer-events: none;
+            z-index: 9999;
+        }
+    </style>
+</head>
+
+<body class="no-scrollbar">
+    <div class="mesh-overlay"></div>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+</body>
+
+</html>
